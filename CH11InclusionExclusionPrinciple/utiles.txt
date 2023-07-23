@@ -1,0 +1,54 @@
+/*
+    Problem: Given a number n, find the total number of integers between 1 and n(inclusive) which are divisible by the first 10(N) prime numbers.
+    Solution: Inclusion Exclusion Principle
+    Complexity: O(2^N * N)
+    Approach: 
+        1. Find all the possible subsets of the first 10 prime numbers.
+        2. For each subset, find the LCM of all the numbers in the subset.
+        3. If the number of elements in the subset(the number of set bits) is odd, add n/lcm to the answer.
+        4. Else, subtract n/lcm from the answer.
+*/
+
+
+int countSetBits(int n){
+//complexity: O(no. of set bits)
+    int count = 0;
+    while(n){
+    //remove last set bit
+    n = n & (n - 1);
+    count++;
+}
+    return count;
+
+
+}
+
+
+
+void solve(){
+    vector <int> primes = {2,3,5,7,11,13,17,19,23,29} ;
+    int n;
+    cin>>n;
+
+
+    int m = primes.size();
+    int ans  = 0;
+
+    for(int i=1;i< (1<<m); i++){
+        int lcm = 1;
+        for(int j=0;j<m;j++){
+            if( (i>>j) & 1 ){
+                lcm*=primes[j];
+            }
+        }
+
+        if( countSetBits(i) % 2 ==  1){
+            ans+= (n/lcm);
+        }else{
+            ans -=(n/lcm);
+        }
+    }
+
+    cout<<ans<<"\n";
+
+}

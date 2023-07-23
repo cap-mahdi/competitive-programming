@@ -1,0 +1,67 @@
+
+// determine the gcd of two numbers in O(log(min(a,b))) complexity
+int gcd(int a,int b){
+    if(b==0){
+        return a;
+    }
+    return gcd(b,a%b);
+}
+//determine the lcm of two numbers in O(log(min(a,b))) complexity
+int lcm(int a,int b){
+    return (a*b)/gcd(a,b);
+}
+
+
+//return the {x,y,gcd} such that ax + by = gcd(a,b), it uses the extended euclidean algorithm, is is done in O(log(min(a,b))) complexity
+vector<int> extendedGCD(int a,int b){
+    if(b==0){
+        return {1,0,a};
+    }
+    vector <int> result = extendedGCD(b,a%b);
+    int x1 = result[0];
+    int y1 = result[1];
+    int gcd = result[2];
+    return {y1, x1 - (a/b)*y1,gcd};
+    
+}
+
+
+// print the modular multiplicative inverse of a modulo m if it exists, it uses the extended euclidean algorithm, is is done in O(log(min(a,b))) complexity
+//it finds x such that ax = 1 (mod m) if a and m are coprime
+void MMI(int a,int m){
+        //! if m is prime then we can use fermat's little theorem to find the multiplicative modulo inverse of a modulo m call the snippet ModuloArithmetic.cpp
+
+    vector<int> result = extendedGCD(a,m);
+    int x = result[0];
+    int gcd = result[2];
+    if(gcd!=1){
+        cout<<"Multiplicative modulo inverse does not exist"<<endl;
+    }
+    else{
+        int ans = (x%m + m)%m;//to make sure that ans is in the range [0,b-1]
+        cout<<"Multiplicative modulo inverse is "<<ans<<endl;
+    }
+}
+
+// print the integral solution of ax + by = c if it exists, it uses the extended euclidean algorithm, is is done in O(log(min(a,b))) complexity
+void soltuionForLinearDiophantine(int a,int b,int c){
+    vector<int> result = extendedGCD(a,b);
+    int x0 = result[0];
+    int y0 = result[1];
+    int gcd = result[2];
+
+    if(c%gcd){
+        cout<<"there is no solution";
+        return;
+    }
+
+    int k = c /gcd;
+    int a1 = a / gcd;
+    int b1 = b/gcd; 
+    x0 = ( (x0*c)%b1 + b1) % b1;
+    y0 = ( (y0*c) %a1 + a1) % a1;
+    cout<<"x = "<<x0<<" + k*"<<b1<<"\n";
+    cout<<"y = "<<y0<<" - k*"<<a1<<"\n";
+}
+
+

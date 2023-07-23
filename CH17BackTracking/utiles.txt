@@ -1,0 +1,147 @@
+// ******generating all subsets of a string using recursion in O(2^n)**********
+//the call will be subsets(s,"",0,s.size())
+void subsets(string s,string output,int i,int n){
+    //base case
+    if(i==n){
+        cout<<output<<"\n";
+        return;
+    }
+
+    //recursive case
+    subsets(s,output,i+1,n);
+    output.push_back(s[i]);
+    subsets(s,output,i+1,n);
+}
+
+// *********generating all subsets of a string using recursion in O(n*n!) ************
+//the call will be permutation(s,"",0,s.size())
+void permutation(string s,string output,int i,int n){
+    //base case
+    if(i==n){
+        cout<<output<<"\n";
+        return;
+    }
+
+    //recursive case
+    for(int j=i;j<n;j++){
+        swap(s[i],s[j]);
+        permutation(s,output+s[i],i+1,n);
+        swap(s[i],s[j]);
+    }
+   
+}
+
+//*********generating all the valid brackets for n pairs of brackets in O(2^n)************
+//the call will be generateBrackets("",0,0,n)
+void generateBrackets(string output,int open,int close,int n){
+    //base case
+    if(open==n && close==n){
+        cout<<output<<"\n";
+        return;
+    }
+
+    //recursive case
+    if(open<n){
+        generateBrackets(output+"(",open+1,close,n);
+    }
+    if(close<open){
+        generateBrackets(output+")",open,close+1,n);
+    }
+}
+
+//*********solve the N-Queen problem in O(n^n) or O(n!) [expoential time complexity]***************
+//the call will be solveNqueens(0,board,n,col,diag1,diag2) 
+//vector<vector<char>> board(n,vector<char>(n,'.'));
+// col[n] = {0} , diag1[2*n-1]={0} , diag2[2*n-1]={0}
+int  solveNqueens(int row,vector<vector<char>> &board,int n,int col[],int diag1[],int diag2[]){
+    //base case
+    if(row==n){        
+        printBoard(board);
+        cout<<"\n";
+        return 1;
+    }
+
+    //recursive case
+    int ways = 0;
+    for(int i=0;i<n;i++){
+        if(col[i]==0 && diag1[row+i]==0 && diag2[n-1-(i-row)]==0){
+            col[i]=1;
+            diag1[row+i]=1;
+            diag2[n-1-(i-row)]=1;
+
+            board[row][i]='Q';
+            ways+=solveNqueens(row+1,board,n,col,diag1,diag2);
+
+
+            //backtrack
+            board[row][i]='.';
+            col[i]=0;
+            diag1[row+i]=0;
+            diag2[n-1-(i-row)]=0;
+        }
+    }
+    return ways;
+}
+
+
+//*****solve the sudoku problem in O(n^m) *********
+//n is the size of the board and m is the number of empty cells
+//the call will be solveSudoku(matrix,0,0,n)
+bool solveSudoku(int matrix[][9],int i,int j,int n){
+    //base case
+    if(i==n){ //if we reach the end of the board
+        printBoard(matrix,n);
+        return true;
+    }
+
+    //recursive case
+    //if we reach the end of the row then go to the next row
+    if(j==n){
+        return solveSudoku(matrix,i+1,0,n);
+    }
+
+    //if the cell is already filled we go to the next cell
+    if(matrix[i][j]!=0){
+        return solveSudoku(matrix,i,j+1,n);
+    }
+
+    //if the cell is empty
+    //try to place every number in the cell
+    for(int number=1;number<=n;number++){
+        //check if the number can be placed in the cell
+
+
+        if(canPlace(matrix,i,j,n,number)){
+            matrix[i][j] = number;
+            bool success = solveSudoku(matrix,i,j+1,n);
+            if(success){
+                return true;
+            }
+        }
+    }
+    matrix[i][j] = 0;
+    return false;
+}
+
+bool canPlace(int matrix[][9],int i,int j,int n,int number){
+    //check if the number is present in the row or column
+    for(int x=0;x<n;x++){
+        if(matrix[x][j]==number || matrix[i][x]==number){
+            return false;
+        }
+    }
+
+    //check if the number is present in the subgrid
+    int rn = sqrt(n); //length of the subgrid
+    int sx = (i/rn)*rn; //starting x coordinate of the subgrid
+    int sy = (j/rn)*rn; //starting y coordinate of the subgrid
+
+    for(int x=sx;x<sx+rn;x++){
+        for(int y=sy;y<sy+rn;y++){
+            if(matrix[x][y]==number){
+                return false;
+            }
+        }
+    }
+    return true;
+}

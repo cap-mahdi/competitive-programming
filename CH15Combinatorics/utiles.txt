@@ -1,0 +1,96 @@
+/*******Binomial Coefficient********/
+const int N = 1e5;
+ vector<vector<int>> binomialCoefficients(N+1, vector<int>(1,0));
+ //nCk = binomialCoefficients[n][k]
+ //used if you need nCk or binomialCoefficients[n][k] for multiple queries
+void computeBinomialCoefficients(){
+   //O(n^2)
+    for(int i=0; i<=N; i++){
+        binomialCoefficients[i][0] = 1;
+        for(int j=1; j<i; j++){
+            binomialCoefficients[i].push_back(binomialCoefficients[i-1][j-1] + binomialCoefficients[i-1][j]);
+        }
+        binomialCoefficients[i].push_back(1);
+    }
+}
+int nCr(int n,int k){
+    return binomialCoefficients[n][k];
+}
+const int P = 1e9 + 7;
+int fact[N];
+int multiplymod(int a, int b){
+    return (a * b) % P;//a and b must be long long int because at worst case a*b can be 1e18 which cannot be stored in int
+}
+int calculateFactorialMod(){
+    //O(N) 
+    fact[0] = 1;
+    for(int i = 1; i <= N; i++){
+        fact[i] = multiplymod(fact[i - 1], i);
+    }
+}
+int nPr(int n,int k){
+    return binomialCoefficients[n][k]*fact[k];
+}
+
+
+
+
+/*****birthday paradox*****/
+int minimum_number_of_people_to_have_the_chance_of_two_people_having_same_bday_greater_than_p(float p){
+    //O(365)
+    //calculate the minimum number of people to have the chance of two people having same birthday greater than p
+    int n = 0;
+    double prob = 1.0;
+    if(p == 100) return 366;
+    while(prob > 1.0 - p/100.0 && n < 366){
+        prob *= (365.0 - n)/365.0;
+        n++;
+    }
+    return n;
+}
+
+
+/****example of catalan number****/
+//counting the number of BSTs with n nodes
+int countBST(int n)
+{
+    //O(2^n)
+    if (n == 0 || n == 1)
+        return 1;
+    int ans = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        ans += countBST(i - 1) * countBST(n - i);
+    }
+    return ans;
+}
+int countBSTtopDown(int n, int *dp)
+{
+    //O(n^2)
+    if (n == 0 || n == 1)
+        return dp[n] = 1;
+    if (dp[n] != 0)
+        return dp[n];
+    int ans = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        ans += countBSTtopDown(i - 1, dp) * countBSTtopDown(n - i, dp);
+    }
+    return dp[n] = ans;
+}
+
+int countBSTBottomUp(int n, int *dp)
+{
+    //O(n^2)
+    dp[0] = 1;
+    dp[1] = 1;
+    for (int i = 2; i <= n; i++)
+    {
+
+        for (int j = 1; j <= i; j++)
+        {
+            dp[i] += dp[j - 1] * dp[i - j];
+        }
+    }
+    return dp[n];
+}

@@ -1,0 +1,160 @@
+
+EXAMPLE OF RECURSION + MEMOIZATION
+
+/*
+    Tiling Problem
+    Given a wall of size 4 x N and tiles of size (1,4) and (4,1)
+    In how many ways you can build the wall?
+    Input: N = 4
+    Output: 2
+    Explanation: We need to find out the number of ways
+    in which we can fill up the 4 x N wall using the
+    1 x 4 and 4 x 1 tiles.
+    For N = 1 = 1
+    For N = 2 = 1
+    For N = 3 = 1
+    For N = 4 = 2
+    So, for N = 4, answer = 2.
+    Time complexity: O(n)
+    Space complexity: O(n)
+    Approach: Recursion + Memoization
+    formula: f(n) = f(n-1) + f(n-4)
+    f(n-1) if we place 1x4 tile vertically
+    f(n-4) if we place 4x1 tile horizontally
+
+    Example
+    Input: N = 5
+    Output: 3
+*/
+int tilingProblem(int n,int *dp){
+    //base case
+    if(n<4){
+        return 1;
+    }
+    if(n==4){
+        return 2;
+    }
+    //recursive case
+    if(dp[n]!=0){
+        return dp[n];
+    }
+    int ans = tilingProblem(n-1,dp) + tilingProblem(n-4,dp);
+    return dp[n] = ans;
+
+}
+
+
+
+/*
+    Problem: Count the number of binary strings of length n, which have no consecutive ones
+    Input: n = 3
+    Output: 5
+    Explanation: 5 strings are (000, 001, 010, 100, 101)
+    Approach: Recursion + Memoization
+    Recursive formula: f(n) = f(n-1) + f(n-2)
+    f(n-1) if we place 0 as the first bit
+    f(n-2) if we place 10 as the first two bits
+
+    Time complexity: O(n)
+    Space complexity: O(n)
+
+    !!with fast exponentiation we can solve this problem in O(logn) time !!
+*/
+
+int countString(int n,int * dp){
+    //base case
+    if(n==0){
+        return 1;
+    }
+    if(n==1){
+        return 2;
+    }
+    //recursive case
+    if(dp[n]!=0){
+        return dp[n];
+    }
+    int ans = countString(n-1,dp) + countString(n-2,dp);
+    return dp[n] = ans;
+}
+
+
+/*
+    Problem : Friend Pairing Problem
+    Given n friends, each one can remain single or can be paired up with some other friend.
+    Each friend can be paired only once. Find out the total number of ways in which friends
+    can remain single or can be paired up.
+    Input: n = 5
+    Output: 26
+    Explanation: {1}, {2}, {3} : all single
+                 {1}, {2,3} : 2 and 3 paired but 1 is single.
+                 {1,2}, {3} : 1 and 2 are paired but 3 is single.
+                 {1,3}, {2} : 1 and 3 are paired but 2 is single.
+                 Note that {1,2} and {2,1} are considered same.
+    
+    Approach: Recursion + Memoization
+    Recursive formula: f(n) = f(n-1) + (n-1)*f(n-2)
+    f(n-1) if we place 1 as single
+    f(n-2) if we place 1 as pair and then we have n-1 options for 1 to pair with
+    Time complexity: O(n)
+    Space complexity: O(n)
+
+*/
+
+int friendPairing(int n,int *dp){
+    //base case
+    if(n==0 || n==1 || n==2){
+        return n;
+    }
+    //recursive case
+    if(dp[n]!=0){
+        return dp[n];
+    }
+    int ans = friendPairing(n-1,dp) + (n-1)*friendPairing(n-2,dp);
+    return dp[n] = ans;
+}
+
+
+
+THE MOST DIFFICULT PROBLEM AND THAT SHOW THE POWER OF RECURSION 
+/*
+    Problem : Tower of Hanoi
+    Given 3 towers and n disks placed on the first tower.
+    The task is to move all the disks from the first tower to the third tower in minimum number of moves.
+    following these rules:
+    1. Only one disk can be moved at a time.
+    2. No bigger disk can be placed on the smaller disk.
+
+    Input: N = 2
+    Output: move disk 1 from A to B
+            move disk 2 from A to C
+            move disk 1 from B to C
+            3
+    
+    Approach: Recursion
+    how to move n disks from src to dest using helper?
+    1. move n-1 disks from src to helper using dest // subproblem that you shoudln't care about
+    2. move nth disk from src to dest
+    3. move n-1 disks from helper to dest using src
+
+
+
+    Time complexity: O(2^n)
+    Space complexity: O(n) because of recursion stack and max depth of recursion tree is n
+
+
+    !!!IMPORTANT!!!
+    1. Recursion is a powerful tool but it comes with a cost.
+    2. IN THIS EXAMPLE, IT IS CLEAR THAT YOU DON'T CARE ABOUT HOW THE SUBPROBLEM IS SOLVED, AND HOW THE RECURSION IS GONNA WORK
+
+*/
+
+void towerOfHanoi(int n,char src,char helper,char dest){
+    //base case
+    if(n==0){
+        return;
+    }
+    //recursive case
+    towerOfHanoi(n-1,src,dest,helper);
+    cout<<src<< "-> "<<dest<<endl;
+    towerOfHanoi(n-1,helper,src,dest);
+}

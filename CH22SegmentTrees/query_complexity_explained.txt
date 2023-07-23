@@ -1,0 +1,14 @@
+A range query using a segment tree basically involves recursing from the root node. You can think of the entire recursion process as a traversal on the segment tree: any time a recursion is needed on a child node, you are visiting that child node in your traversal. So analyzing the complexity of a range query is equivalent to finding the upper bound for the total number of nodes that are visited.
+
+It turns out that at any arbitrary level, there are at most 4 nodes that can be visited. Since the segment tree has a height of log(n) and that at any level there are at most 4 nodes that can be visited, the upper bound is actually 4*log(n). The time complexity is therefore O(log(n)).
+
+Now we can prove this with induction. The base case is at the first level where the root node lies. Since the root node has at most two child nodes, we can only visit at most those two child nodes, which is at most 4 nodes.
+
+Now suppose it is true that at an arbitrary level (say level i) we visit at most 4 nodes. We want to show that we will visit at most 4 nodes at the next level (level i+1) as well. If we had visited only 1 or 2 nodes at level i, it's trivial to show that at level i+1 we will visit at most 4 nodes because each node can have at most 2 child nodes.
+
+So let's focus on the assumption that 3 or 4 nodes were visited at level i, and try to show that at level i+1 we can also have at most 4 visited nodes. Now since the range query is asking for a contiguous range, we know that the 3 or 4 nodes visited at level i can be categorized into 3 partitions of nodes: a leftmost single node whose segment range is only partially covered by the query range, a rightmost single node whose segment range is only partially covered by the query range, and 1 or 2 middle nodes whose segment range is fully covered by the query range. Since the middle nodes have their segment range(s) fully covered by the query range, there would be no recursion at the next level; we just use their precomputed sums. We are left with possible recursions on the leftmost node and the rightmost node at the next level, which is obviously at most 4.
+
+This completes the proof by induction. We have proven that at any level at most 4 nodes are visited. The time complexity for a range query is therefore O(log(n)).
+
+
+src: https://stackoverflow.com/questions/30236813/segment-tree-query-complexity  (2nd explanation)

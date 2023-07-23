@@ -1,0 +1,42 @@
+site: Codechef problem name: DIVSUB
+    statement: Given an array of n integers, find a subarray whose sum is divisible by n.
+    Approach:
+        1. Calculate the cumulative sum of the array.
+        2. If the cumulative sum is divisible by n, then we are done.
+        3. If not, then we have to find two indices i and j such that cum[i]%n = cum[j]%n.
+        4. If we find such indices, then the subarray between i and j will be our answer.
+    such subarray exists because of the pigeonhole principle.
+    If we have n holes and n+1 pigeons, then there will be atleast one hole with two pigeons.
+    in this example there are two cases 
+    1. if 0 is present in the cum array then we are done.
+    2. if 0 is not present then we have n-1(possbilites of cum[i]%n) and n numbers.so there will be atleast 2 numbers with same remainder.
+complexity: O(n)
+
+
+site: Codechef problem name: GRAY similar code
+    Statement: Given an array of n integers, where 2 consecutive integers differ in only one bit,
+    find 4 integers whose xor is 0.
+    if such 4 integers exist print "Yes" else print "No".
+    Approach:
+        if(n>=130) then print "Yes" because if we xor 2 consecutive integers then we will get 64 different values.(1<<63 to 1<<0)
+        so we will have 65 pairs of integers with different xor values.At least two pairs will have same xor value.(pigeonhole principle)
+
+        if(n<130) then we will check for every triplet if there is a number in the array with xor value equal to the xor of the triplet.
+        if such a number exists then print "Yes" else print "No".
+        we will do it in O(n^3) time.because we will store the numbers in a map and check if the number exists in the map or not.
+
+
+
+site: SPOJ
+    problem name: HOLIDAY ACCOMADATION
+    statement: read https://www.spoj.com/problems/HOLI/
+    approach:
+        let's have an edge between two cities if there is a road between them.
+        we divide the tree into two parts by removing an edge.
+        let's say the size of one part is x and the other is n-x.
+        then the maximum persons that can travel between these two parts is 2*min(x,n-x).(pigonhole principle)
+        because in the statement preople always take the shortest path.
+        we then only mutliply it with the weight of the edge.
+        we do it for all the egdes and add it to the answer.
+        we can do it by dfs.
+    complexity : O(n)

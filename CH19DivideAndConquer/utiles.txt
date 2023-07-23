@@ -1,0 +1,234 @@
+//********merge sort
+void merge(vector<int> &arr,int s,int e){
+    //O(n)
+    vector<int> temp;
+    int mid = (s + e) / 2;
+    int i = s;
+    int j = mid + 1;
+    while(i <= mid && j <= e){
+        if(arr[i] < arr[j]){
+            temp.push_back(arr[i++]);
+        }
+        else{
+            temp.push_back(arr[j++]);
+        }
+    }
+
+    while(i <= mid){
+        temp.push_back(arr[i]);
+        i++;
+    }
+
+    while(j <= e){
+        temp.push_back(arr[j]);
+        j++;
+    }
+    
+    int k = 0;
+    for(int idx = s; idx <= e; idx++){
+        arr[idx] = temp[k++];
+    }
+
+}
+
+void mergeSort(vector<int> &arr,int s,int e){
+    //sort the array in the range [s,e]
+    //O(nlogn)
+    //base case
+    if(s >= e){
+        return;
+    }
+
+    //recursive case
+    //divide
+    int mid = (s + e) / 2;
+    mergeSort(arr, s, mid);
+    mergeSort(arr, mid + 1, e);
+    merge(arr, s, e);
+}
+
+//*********quick sort
+
+int partition(vector<int> &arr, int s, int e)
+{
+    // O(n)
+    int pivot = arr[e];
+    int i = s - 1;
+    for (int j = s; j < e; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[e]);
+    return i + 1;
+}
+void quickSort(vector<int> &arr, int s, int e)
+{
+    //sort the array in the range [s,e]
+    // O(nlogn) to O(n^2)
+    // base case
+    if (s >= e)
+    {
+        return;
+    }
+
+    // recursive case
+    // divide
+    int p = partition(arr, s, e); // return the index of the pivot element placed in the correct position
+    // conquer
+    quickSort(arr, s, p - 1);
+    quickSort(arr, p + 1, e);
+}
+
+
+//****quick select
+int partition(vector<int> &arr, int s, int e)
+{
+    //divide the array into two parts such that all the elements in the left part are smaller than the pivot element and all the elements in the right part are greater than the pivot element
+    // O(n)
+    int pivot = arr[e];
+    int i = s - 1;
+    for (int j = s; j < e; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[e]);
+    return i + 1;
+}
+
+int quickSelect(vector<int> &arr, int s, int e, int k)
+{
+    //find the kth smallest element in the array
+    // O(n) to O(n^2)
+    // base case
+    if (s >= e)
+    {
+        return -1;
+    }
+
+    // recursive case
+    int p = partition(arr, s, e);
+    if (p + 1 == k)
+    {
+        return arr[p];
+    }
+    else if (p > k)
+    {
+        return quickSelect(arr, s, p - 1, k);
+    }
+    else
+    {
+        return quickSelect(arr, p + 1, e, k);
+    }
+}
+
+//*********inversion count CASE OF USING MERGE SORT
+int mergeAndCountCrossInversions(vector<int> &arr, int s, int e)
+{
+    // merge the two sorted arrays in the range [s,e] and count the number of cross inversions
+    // O(n)
+    vector<int> temp;
+    int mid = (s + e) / 2;
+    int i = s;
+    int j = mid + 1;
+    int inversionCount = 0;
+    while (i <= mid && j <= e)
+    {
+        if (arr[i] <= arr[j])
+        {
+            temp.push_back(arr[i++]);
+        }
+        else
+        {
+            temp.push_back(arr[j++]);
+            inversionCount += mid - i + 1;
+        }
+    }
+
+    while (i <= mid)
+    {
+        temp.push_back(arr[i]);
+        i++;
+    }
+
+    while (j <= e)
+    {
+        temp.push_back(arr[j]);
+        j++;
+    }
+
+    int k = 0;
+    for (int idx = s; idx <= e; idx++)
+    {
+        arr[idx] = temp[k++];
+    }
+    return inversionCount;
+}
+
+int inversionCount(vector<int> &arr, int s, int e)
+{
+    // sort the array in the range [s,e]
+    // O(nlogn)
+    // base case
+    if (s >= e)
+    {
+        return 0;
+    }
+
+    // recursive case
+    // divide
+    int mid = (s + e) / 2;
+    int leftInversions = inversionCount(arr, s, mid);
+    int rightInversions = inversionCount(arr, mid + 1, e);
+    int crossinversions = mergeAndCountCrossInversions(arr, s, e);
+    return leftInversions + rightInversions + crossinversions;
+}
+
+
+//****** Ternary Search
+double ternarySeachForMin(double s, double e)
+{
+    // find the minimum of the parabola f THAT SHOULD BE DEFINED in the range [s,e]
+    // O(log(3/2)n)
+    double eps = 1e-6;
+    // cout<< setprecision(10)<<fixed; if you fixed it to 10 decimal places you won't get 6 
+    while (e - s > eps)
+    {
+        // cout << s << " " << e << " " << e-s << " " << (e-s)/3 << endl;
+        double mid1 = s + (e - s) / 3;
+        double mid2 = e - (e - s) / 3;
+        if (parabola(mid1) < parabola(mid2))
+        {
+            e = mid2;
+        }
+        else
+        {
+            s = mid1;
+        }
+    }
+    return s;
+}
+
+int ternarySeach(vector<int> arr, int s, int e)
+{
+    // find the maximum of the array in the range [s,e]
+    // O(log(3/2)n)
+    while(s <= e){
+        int mid1 = s + (e - s) / 3;
+        int mid2 = e - (e - s) / 3;
+        if(arr[mid1] < arr[mid2]){
+            s = mid1 + 1;
+        }
+        else{
+            e = mid2 - 1;
+        }
+    }
+    return arr[s];
+}
