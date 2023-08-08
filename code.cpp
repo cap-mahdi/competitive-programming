@@ -5,31 +5,42 @@ using namespace std;
 void solve() {
     int n;
     cin >> n;
-    int cnt[n];
-    memset(cnt, 0, n);
-    for (int i = 0;i < n;i++) {
-        cnt[i] = 0;
-        // ans = max(ans, cnt[i]);
-    }
-    // for (int i = 0;i < n;i++) {
-    //     cout << cnt[i] << " ";
-    // }
-    // cout << endl;
-    int temp = n;
-    while (n--) {
+    vector<pair<int, int>> a;
+    int ans[n];
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
         int b;
         cin >> b;
-        int p = b;
-        while (p <= temp) {
-            cnt[p - 1]++;
-            p += b;
+        a.push_back({ b,i });
+        sum += b;
+    }
+    sort(a.begin(), a.end());
+    sum += n;
+    int t = n;
+    for (int i = 0;i < n;i++) {
+        // cout << " sum " << sum << endl;
+        if (i == 0)
+        {
+            ans[a[i].second] = sum - a[i].first * t;
+            sum = sum - a[i].first * t;
         }
+        else
+        {
+            ans[a[i].second] = sum - (a[i].first - a[i - 1].first) * t;
+            sum = sum - (a[i].first - a[i - 1].first) * t;
+        }
+        // cout << a[i].second << " " << ans[a[i].second] << endl;
+        if (i != n - 1) {
+            // cout << "we will add " << a[i + 1].first << " - " << a[i].first << " * " << n - t + 1 << endl;
+            sum += (n - t + 1) * (a[i + 1].first - a[i].first);
+        }
+        t--;
+
     }
-    int ans = cnt[0];
-    for (int i = 1;i < temp;i++) {
-        ans = max(ans, cnt[i]);
+    for (int anss : ans) {
+        cout << anss << " ";
     }
-    cout << ans << "\n";
+    cout << "\n";
 }
 int32_t main() {
     //fast I/O
@@ -44,6 +55,7 @@ int32_t main() {
 }
 /*
 1
-5
-1 2 3 4 5
+3
+1 4 3
+
 */

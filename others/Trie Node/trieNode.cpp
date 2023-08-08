@@ -2,55 +2,62 @@
 #define int long long int
 using namespace std;
 
-struct TrieNode {
-    bool isEnd;
-    TrieNode* children[26];
+//example of a trie structure
+class TrieNode {
+public:
+    char s;
+    unordered_map<char, TrieNode*> children;
+    string word;
+    bool isTerminal;
+
+    TrieNode(char s) {
+        this->s = s;
+        isTerminal = false;
+        word = "";
+    }
 };
 
-TrieNode* getNode() {
-    TrieNode* node = new TrieNode;
-    node->isEnd = false;
-    for (int i = 0; i < 26; i++) {
-        node->children[i] = NULL;
-    }
-    return node;
-}
+class Trie {
+public:
+    TrieNode* root;
 
-void insert(TrieNode* root, string key) {
-    //O(key.size())
-    TrieNode* temp = root;
-    for (int i = 0; i < key.size(); i++) {
-        int index = key[i] - 'a';
-        if (temp->children[index] == NULL) {
-            temp->children[index] = getNode();
+    Trie() {
+        root = new TrieNode('\0');
+    }
+
+    void addWord(string word) {
+        //O(word.size())
+        TrieNode* temp = root;
+        for (auto ch : word) {
+            if (temp->children.count(ch) == 0) {
+                temp->children[ch] = new TrieNode(ch);
+            }
+            temp = temp->children[ch];
         }
-        temp = temp->children[index];
+        //last node
+        temp->isTerminal = true;
+        temp->word = word;
     }
-    temp->isEnd = true;
-}
-
-bool search(TrieNode* root, string key) {
-    //O(key.size())
-    TrieNode* temp = root;
-    for (int i = 0; i < key.size(); i++) {
-        int index = key[i] - 'a';
-        if (temp->children[index] == NULL) {
-            return false;
+    bool searchWord(string word) {
+        //O(word.size())
+        TrieNode* temp = root;
+        for (auto ch : word) {
+            if (temp->children.count(ch) == 0) {
+                return false;
+            }
+            temp = temp->children[ch];
         }
-        temp = temp->children[index];
+        return temp->isTerminal;
     }
-    return (temp->isEnd);
-}
-
+};
 
 void solve() {
-    TrieNode* root = getNode();
-    insert(root, "hello");
-    insert(root, "world");
-    cout << search(root, "hello") << endl;
-    cout << search(root, "hell") << endl;
-    cout << search(root, "world") << endl;
-    cout << search(root, "wor") << endl;
+    Trie t;
+    t.addWord("hello");
+    t.addWord("hell");
+    cout << t.searchWord("hello") << endl;
+    cout << t.searchWord("hell") << endl;
+    cout << t.searchWord("hel") << endl;
 
 }
 int32_t main() {
