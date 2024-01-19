@@ -10,30 +10,23 @@ void yes() {
 }
 
 void solve() {
-    string s;
-    cin >> s;
-    if (s.substr(0, 6) == "$GPGGA") {
-        cout << "signal void GGA(void){\n";
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    int prod = 1;
+    for (int i = 0;i < n;i++) {
+        cin >> a[i];
+        prod *= a[i];
     }
-    else {
-        cout << "signal void RMC(void){\n";
-    }
-
-    for (char c : s) {
-        cout << "swatch(0.01);" << "S1IN='" << c << "';" << "\n";
-    }
+    if (2023 % prod != 0) { cout << "NO\n"; return; }
+    cout << "YES\n";
+    cout << 2023 / prod << " ";
+    k--;
+    while (k--) cout << "1 ";
     cout << "\n";
-    cout << "\n";
-    cout << "\n";
-    cout << "\n";
-
-    cout << "}" << "\n";
 
 
 }
-
-
-
 int32_t main() {
     //fast I/O
     ios_base::sync_with_stdio(false);
@@ -52,9 +45,6 @@ int32_t main() {
     cin >> t;
     while (t--) {
         solve();
-        if (t) {
-            cout << "\n";
-        }
     }
     return 0;
 }

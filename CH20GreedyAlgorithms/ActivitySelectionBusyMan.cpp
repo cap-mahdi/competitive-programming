@@ -68,7 +68,7 @@ void solve()
     {
         int s, e;
         cin >> s >> e;
-        act.push_back({s, e});
+        act.push_back({ s, e });
     }
     sort(act.begin(), act.end(), compare);
     // for (int i = 0; i < n; i++)
@@ -100,7 +100,7 @@ int32_t main()
     return 0;
 }
 /*
-1
+
 6
 7 9
 0 10
@@ -109,3 +109,4 @@ int32_t main()
 4 10
 5 7
 */
+

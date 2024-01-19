@@ -1,47 +1,45 @@
 #include <bits/stdc++.h>
 #define int long long int
 using namespace std;
-vector<int> extendedGCD(int a,int b){
-    if(b==0){
-        return {1,0,a};
-    }
-    vector <int> result = extendedGCD(b,a%b);
-    int x1 = result[0];
-    int y1 = result[1];
-    int gcd = result[2];
-    return {y1, x1 - (a/b)*y1,gcd};
-    
-}
-/*
-    Multiplicative modulo inverse of a modulo m is a number x such that (a*x)%m = 1
-    if a and m are coprime then there exists a multiplicative modulo inverse of a modulo m
-    if a and m are not coprime then there does not exist a multiplicative modulo inverse of a modulo m
-    if a and m are coprime then we can use extended euclidean algorithm to find x and y such that ax + my = gcd(a,m) = 1 which indeed has a solution
-    if we take modulo m on both sides we get ax = 1 (mod m)
-    so x is the multiplicative modulo inverse of a modulo m
-    Complexity: O(log(min(a,b))) same as gcd
-*/
-void MMI(int a,int m){
-    //! if m is prime then we can use fermat's little theorem to find the multiplicative modulo inverse of a modulo m call the snippet ModuloArithmetic.cpp
-    vector<int> result = extendedGCD(a,m);
-    int x = result[0];
-    int gcd = result[2];
-    if(gcd!=1){
-        cout<<"Multiplicative modulo inverse does not exist"<<endl;
-    }
-    else{
-        int ans = (x%m + m)%m;//to make sure that ans is in the range [0,b-1]
-        cout<<"Multiplicative modulo inverse is "<<ans<<endl;
-    }
+
+const int P = 1e9 + 7;//it shoud be prime number because we are using fermat's little theorem whichi is only applicable for prime numbers
+//the theoreme is : a^(p-1) = 1 (mod p) where p is prime number and a is any number so  we can write a^(p-2) = a^(-1) (mod p) which is the inverse of a
+
+
+
+int multiplymod(int a, int b) {
+    return (a * b) % P;//a and b must be long long int because at worst case a*b can be 1e18 which cannot be stored in int
 }
 
-void solve(){
-    int a,m;
-    cin>>a>>m;
-    MMI(a,m);
-    
+int powermod(int a, int b) {
+    //it determines a^b (mod p)
+    //fast exponentiation in O(log(b))
+    int res = 1;
+    while (b) {
+        if (b & 1) {
+            res = multiplymod(res, a);
+        }
+        a = multiplymod(a, a);
+        b >>= 1;
+    }
+    return res;
 }
-int32_t main(){
+
+int modInverse(int a) {
+    //it determines  a^(-1) (mod p)
+    ///O(log(P ))
+    //using fermat's little theorem
+    return powermod(a, P - 2);
+}
+
+
+
+void solve() {
+
+    cout << modInverse(30) << "\n";
+
+}
+int32_t main() {
     //fast I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
