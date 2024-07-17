@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
+#include <ext/pb_ds/detail/standard_policies.hpp>
 #define int long long int
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
 using namespace std;
+using namespace __gnu_pbds;
 
 void no() {
     cout << "NO" << "\n";
@@ -10,30 +15,22 @@ void yes() {
 }
 
 void solve() {
-    string s;
-    cin >> s;
-    if (s.substr(0, 6) == "$GPGGA") {
-        cout << "signal void GGA(void){\n";
+    int n;
+    cin >> n;
+    map<int, int> mapper;
+    for (int i = 0;i < n;i++) {
+        int a;
+        cin >> a;
+        mapper[a]++;
     }
-    else {
-        cout << "signal void RMC(void){\n";
+    int ans = 0;
+    for (auto p : mapper) {
+        int loc = p.second;
+        ans += (loc / 3);
     }
-
-    for (char c : s) {
-        cout << "swatch(0.01);" << "S1IN='" << c << "';" << "\n";
-    }
-    cout << "\n";
-    cout << "\n";
-    cout << "\n";
-    cout << "\n";
-
-    cout << "}" << "\n";
-
+    cout << ans << "\n";
 
 }
-
-
-
 int32_t main() {
     //fast I/O
     ios_base::sync_with_stdio(false);
@@ -52,9 +49,6 @@ int32_t main() {
     cin >> t;
     while (t--) {
         solve();
-        if (t) {
-            cout << "\n";
-        }
     }
     return 0;
 }

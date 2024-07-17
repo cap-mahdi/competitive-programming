@@ -2,13 +2,13 @@
 #define int long long int
 using namespace std;
 
-const int P = 1e9 + 7;//it shoud be prime number because we are using fermat's little theorem whichi is only applicable for prime numbers
+const int MOD = 1e9 + 7;//it shoud be prime number because we are using fermat's little theorem whichi is only applicable for prime numbers
 //the theoreme is : a^(p-1) = 1 (mod p) where p is prime number and a is any number so  we can write a^(p-2) = a^(-1) (mod p) which is the inverse of a
 
 
 
 int multiplymod(int a, int b) {
-    return (a * b) % P;//a and b must be long long int because at worst case a*b can be 1e18 which cannot be stored in int
+    return (a * b) % MOD;//a and b must be long long int because at worst case a*b can be 1e18 which cannot be stored in int
 }
 
 int powermod(int a, int b) {
@@ -29,7 +29,7 @@ int modInverse(int a) {
     //it determines  a^(-1) (mod p)
     ///O(log(P ))
     //using fermat's little theorem
-    return powermod(a, P - 2);
+    return powermod(a, MOD - 2);
 }
 
 

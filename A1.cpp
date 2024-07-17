@@ -1,12 +1,41 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
+#include <ext/pb_ds/detail/standard_policies.hpp>
 #define int long long int
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
 using namespace std;
+using namespace __gnu_pbds;
 
 void no() {
     cout << "NO" << "\n";
 }
 void yes() {
     cout << "YES" << "\n";
+}
+
+const int N = 1e6 + 5;
+vector<int> S(N, 0);
+vector<int> B(N, INT_MAX);
+void sieve() {
+    S[0] = S[1] = 1;
+    for (int i = 2;i < N;i++) {
+        if (S[i] != 0) continue;
+        for (int j = i;j < N;j += i) {
+            S[j] = i;
+        }
+    }
+}
+void best() {
+    for (int i = 2;i < N;i++) {
+        int loc = i;
+        for (int j = S[i];j > 1;j = j / S[j]) {
+            loc = min(loc, i / j + 2 * j);
+        }
+        B[i] = loc;
+    }
+    B[1] = 1;
+
 }
 
 void solve() {
@@ -16,32 +45,6 @@ void solve() {
     for (int i = 0;i < n;i++) {
         cin >> a[i];
     }
-    int ans = 0;
-    for (int i = 2;i < n;i++) {
-        if (n % i != 0) continue;
-        int d = n / i;
-        int candidate = abs(a[0] - a[d]);
-        bool ok = true;
-        for (int loop = 0;loop < i - 1;loop++) {
-            cout << "loop " << loop << " d " << d << endl;
-            for (int index = loop;index < loop + d;index++) {
-                int possible = abs(a[index] - a[index + d]);
-                cout << "possible " << possible << " candidate " << candidate << endl;
-                int s = min(possible, candidate);
-                int l = max(possible, candidate);
-                if (l % s) {
-                    ok = false;
-                    break;
-                }
-                candidate = s;
-            }
-            if (!ok) {
-                break;
-            }
-        }
-        if (ok) ans++;
-    }
-    cout << ans << "\n";
 
 }
 int32_t main() {
@@ -57,7 +60,11 @@ int32_t main() {
     // online submission
 #endif
 
-
+    sieve();
+    best();
+    for (int i = 1;i < 20;i++) {
+        cout << B[i];
+    }
     int t;
     cin >> t;
     while (t--) {

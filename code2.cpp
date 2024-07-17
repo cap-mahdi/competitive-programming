@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
+#include <ext/pb_ds/detail/standard_policies.hpp>
 #define int long long int
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
 using namespace std;
+using namespace __gnu_pbds;
 
 void no() {
     cout << "NO" << "\n";
@@ -9,51 +14,12 @@ void yes() {
     cout << "YES" << "\n";
 }
 
-bool isSum(int s, vector<int>& c) {
-    if (!s) return true;
-    cout << "s" << s << endl;
-    if ((s & (s - 1)) == 0) {
-        bool all = true;
-        for (int i = (log2(s) + 1); i >= 0;i--) {
-            if (c[i] == 0) {
-                bool isDoable = isSum(s & (1 << i), c);
-                all = isDoable;
-            }
-            if (!all) break;
-        }
-        return all;
-    }
-    for (int i = 30;i >= 0;i--) {
-        if ((s >> i) & 1) {
-            if (c[i] > 0) { c[i]--; continue; }
-            bool isDoable = isSum(s & (1 << i), c);
-            if (!isDoable)
-                return false;
-
-        }
-    }
-    return true;
-}
-
 void solve() {
     int n;
     cin >> n;
-    vector<int> a(30, 0);
-    while (n--) {
-        int t, s;
-        cin >> t >> s;
-        if (t == 1) {
-            a[s]++;
-        }
-        else {
-            vector<int> c = a;
-            if (isSum(s, c)) {
-                yes();
-            }
-            else {
-                no();
-            }
-        }
+    vector<int> a(n);
+    for (int i = 0;i < n;i++) {
+        cin >> a[i];
     }
 
 }
@@ -71,6 +37,10 @@ int32_t main() {
 #endif
 
 
-    solve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }

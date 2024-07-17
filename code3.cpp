@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
+#include <ext/pb_ds/detail/standard_policies.hpp>
 #define int long long int
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
 using namespace std;
+using namespace __gnu_pbds;
 
 void no() {
     cout << "NO" << "\n";
@@ -9,40 +14,20 @@ void yes() {
     cout << "YES" << "\n";
 }
 
-bool isSum(int s, vector<int>& c) {
-    cout << "s" << s << endl;
-    for (int i = 33;i >= 0;i--) {
-        if ((s >> i) & 1) {
-            if (c[i] > 0) { c[i]--; continue; }
-            bool isDoable = isSum(s & (1 << i), c);
-            if (!isDoable)
-                return false;
-
-        }
-    }
-    return true;
-}
-
 void solve() {
-    int n;
-    cin >> n;
-    vector<int> a(30, 0);
-    while (n--) {
-        int t, s;
-        cin >> t >> s;
-        if (t == 1) {
-            a[s]++;
-        }
-        else {
-            vector<int> c = a;
-            if (isSum(s, c)) {
-                yes();
-            }
-            else {
-                no();
-            }
-        }
-    }
+    int n, s, r;
+    cin >> n >> s >> r;
+    int M = s - r;
+    n--;
+    cout << M << " ";
+    int upper = r / n;
+    if (r % n) upper++;
+    int alpha = (r + n) - n * upper;
+
+    for (int i = 0;i < alpha;i++) cout << upper << " ";
+    for (int i = 0;i < n - alpha;i++) cout << upper - 1 << " ";
+    cout << "\n";
+
 
 }
 int32_t main() {
@@ -59,6 +44,10 @@ int32_t main() {
 #endif
 
 
-    solve();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
     return 0;
 }
